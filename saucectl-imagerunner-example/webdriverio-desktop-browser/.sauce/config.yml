@@ -1,0 +1,22 @@
+apiVersion: v1alpha
+kind: imagerunner
+
+sauce:
+  region: us-west-1
+
+suites:
+  - name: webdriverio-desktop-browser
+    image: saucelabs/imagerunner-webdriverio-desktop-browser:latest
+    resourceProfile: c3m3
+    workload: webdriver
+    entrypoint: npm run test.saucelabs.v2
+    artifacts:
+      - "/app/artifacts/screenshots"
+
+artifacts:
+  cleanup: false
+  download:
+    when: always
+    match:
+      - '*'
+    directory: ./artifacts
