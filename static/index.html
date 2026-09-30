@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QA Engineering Assessment | Control Center & Test Automation Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <div class="brand-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="brand-title">QA Assessment Control Center</h1>
+        <span class="brand-subtitle">OrangeHRM & SauceDemo Automation Suite</span>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <div class="live-status-pill" id="liveStatusPill">
+        <span class="pulse-dot"></span>
+        <span id="statusPillText">Runner Ready</span>
+      </div>
+      <button class="btn btn-secondary" id="btnGenerateExcel" title="Regenerate Assessment Spreadsheet">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="18" x2="12" y2="12"/>
+          <line x1="9" y1="15" x2="15" y2="15"/>
+        </svg>
+        Generate Excel
+      </button>
+      <a href="/api/download-excel" class="btn btn-primary" id="btnDownloadExcel">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download Matrix (.xlsx)
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Container with Sidebar & Content -->
+  <div class="layout-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <button class="nav-tab active" data-target="tab-overview">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="9"/>
+            <rect x="14" y="3" width="7" height="5"/>
+            <rect x="14" y="12" width="7" height="9"/>
+            <rect x="3" y="16" width="7" height="5"/>
+          </svg>
+          Overview & Metrics
+        </button>
+
+        <button class="nav-tab" data-target="tab-runner">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          Test Runner & Console
+          <span class="badge badge-success-subtle">16 Tests</span>
+        </button>
+
+        <button class="nav-tab" data-target="tab-findings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          Product QA Matrix
+          <span class="badge badge-info-subtle">10 Items</span>
+        </button>
+
+        <button class="nav-tab" data-target="tab-gallery">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+          Evidence Gallery
+        </button>
+
+        <button class="nav-tab" data-target="tab-deliverables">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          Assessment Artifacts
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="footer-info">
+          <div class="author-label">Repository</div>
+          <a href="https://github.com/Basanagouda7/QA-Assignment" target="_blank" class="author-link">
+            Basanagouda7/QA-Assignment ↗
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content Workspace -->
+    <main class="main-content">
+      <!-- TAB 1: OVERVIEW -->
+      <section id="tab-overview" class="tab-panel active">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Executive Quality Summary</h2>
+            <p class="section-desc">Comprehensive test execution metrics, product findings distribution, and E2E automation coverage.</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-outline" id="btnRefreshStats">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 4v6h-6"/>
+                <path d="M1 20v-6h6"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+              Refresh Stats
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric Stat Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon icon-emerald">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </div>
+            <div class="stat-data">
+              <span class="stat-value" id="statPassRate">100%</span>
+              <span class="stat-label">Automation Pass Rate</span>
+            </div>
+            <div class="stat-sub">16 of 16 tests passing</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon icon-cyan">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+            </div>
+            <div class="stat-data">
+              <span class="stat-value" id="statTotalTests">16</span>
+              <span class="stat-label">Automated Scenarios</span>
+            </div>
+            <div class="stat-sub">7 Core Test Classes (SauceDemo)</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon icon-amber">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </div>
+            <div class="stat-data">
+              <span class="stat-value" id="statFindingsCount">10</span>
+              <span class="stat-label">OrangeHRM Findings</span>
+            </div>
+            <div class="stat-sub">3 Bugs / 2 UX / 5 Positive Baselines</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon icon-purple">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <div class="stat-data">
+              <span class="stat-value" id="statDuration">~97s</span>
+              <span class="stat-label">Execution Speed</span>
+            </div>
+            <div class="stat-sub">Selenium Headless Chrome</div>
+          </div>
+        </div>
+
+        <!-- Two Column Breakdown -->
+        <div class="grid-2col">
+          <!-- OrangeHRM Matrix Breakdown Card -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Product-Level Breakdown (OrangeHRM SaaS)</h3>
+            </div>
+            <div class="breakdown-list">
+              <div class="breakdown-item">
+                <div class="breakdown-label">
+                  <span class="tag tag-functional">Functional Bugs</span>
+                  <span class="text-muted">Data corruption & validation bypass</span>
+                </div>
+                <span class="badge badge-warning">3 Issues</span>
+              </div>
+              <div class="breakdown-item">
+                <div class="breakdown-label">
+                  <span class="tag tag-ux">UX & Logical Flaws</span>
+                  <span class="text-muted">Stale table reset & cached back history</span>
+                </div>
+                <span class="badge badge-info">2 Issues</span>
+              </div>
+              <div class="breakdown-item">
+                <div class="breakdown-label">
+                  <span class="tag tag-positive">Positive Observations</span>
+                  <span class="text-muted">Date inversion, RFC email, bulk check</span>
+                </div>
+                <span class="badge badge-success">5 Verified</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-outline btn-sm" onclick="switchTab('tab-findings')">View Full Findings Matrix →</button>
+            </div>
+          </div>
+
+          <!-- SauceDemo E2E Breakdown Card -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Automated Coverage Scope (SauceDemo)</h3>
+            </div>
+            <div class="breakdown-list">
+              <div class="breakdown-item">
+                <div class="breakdown-label">
+                  <span class="tag tag-auth">Authentication</span>
+                  <span class="text-muted">Standard, locked user, invalid credentials, blank inputs</span>
+                </div>
+                <span class="badge badge-success">4 Tests</span>
+              </div>
+              <div class="breakdown-item">
+                <div class="breakdown-label">
+                  <span class="tag tag-catalog">Catalog & Sorting</span>
+                  <span class="text-muted">6 inventory items, attributes, Low-to-High sort</span>
+                </div>
+                <span class="badge badge-success">3 Tests</span>
+              </div>
+              <div class="breakdown-item">
+                <div class="breakdown-label">
+                  <span class="tag tag-cart">Cart & Checkout</span>
+                  <span class="text-muted">Multi-add, badge counter, item removal, full checkout</span>
+                </div>
+                <span class="badge badge-success">7 Tests</span>
+              </div>
+              <div class="breakdown-item">
+                <div class="breakdown-label">
+                  <span class="tag tag-security">Security & Logout</span>
+                  <span class="text-muted">Burger menu logout, route authorization guard</span>
+                </div>
+                <span class="badge badge-success">2 Tests</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-outline btn-sm" onclick="switchTab('tab-runner')">Open Test Runner Console →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: TEST RUNNER & CONSOLE -->
+      <section id="tab-runner" class="tab-panel">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Automated Test Runner & Live Console</h2>
+            <p class="section-desc">Trigger full Pytest E2E execution or run isolated scenarios with real-time streaming output.</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" id="btnRunFullSuite">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+              Run Full Test Suite (16 Tests)
+            </button>
+          </div>
+        </div>
+
+        <!-- Terminal Console View -->
+        <div class="console-wrapper">
+          <div class="console-header">
+            <div class="console-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <span class="console-title">Selenium Headless Chrome Test Runner</span>
+            <div class="console-actions">
+              <button class="btn-icon" id="btnClearConsole" title="Clear Console">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <pre class="console-body" id="consoleOutput">Loading console ready state...</pre>
+        </div>
+
+        <!-- Test Scenarios Catalog Grid -->
+        <div class="catalog-section">
+          <div class="catalog-header">
+            <h3 class="card-title">Automated Scenarios Catalog (Click to Run In Isolation)</h3>
+            <span class="text-muted" id="testsCatalogCount">16 Tests Registered</span>
+          </div>
+          <div class="tests-grid" id="testsCatalogGrid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: PRODUCT QA MATRIX (ORANGEHRM) -->
+      <section id="tab-findings" class="tab-panel">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Product-Level Quality Assessment (OrangeHRM SaaS)</h2>
+            <p class="section-desc">10 verified functional bugs, usability observations, and positive baseline validations.</p>
+          </div>
+          <div class="filter-toolbar">
+            <input type="text" id="findingsSearch" class="input-search" placeholder="Search findings by keyword, module, or ID...">
+            <select id="severityFilter" class="select-filter">
+              <option value="ALL">All Severities</option>
+              <option value="Medium">Medium Severity</option>
+              <option value="Low">Low Severity</option>
+            </select>
+            <select id="typeFilter" class="select-filter">
+              <option value="ALL">All Types</option>
+              <option value="Functional Bug">Functional Bug</option>
+              <option value="UX">UX / Logical Issue</option>
+              <option value="Observation">Observation (Positive)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="findings-grid" id="findingsContainer">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- TAB 4: EVIDENCE GALLERY -->
+      <section id="tab-gallery" class="tab-panel">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Visual Evidence & Screenshot Gallery</h2>
+            <p class="section-desc">High-resolution artifacts captured during exploratory testing and automated E2E runs.</p>
+          </div>
+        </div>
+
+        <div class="gallery-filter-tabs">
+          <button class="gallery-tab active" data-filter="all">All Screenshots</button>
+          <button class="gallery-tab" data-filter="saucedemo">SauceDemo Automation</button>
+          <button class="gallery-tab" data-filter="orangehrm">OrangeHRM Exploratory</button>
+        </div>
+
+        <div class="gallery-grid" id="galleryGrid">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- TAB 5: DELIVERABLES & ARTIFACTS -->
+      <section id="tab-deliverables" class="tab-panel">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Deliverable Artifacts & Reports</h2>
+            <p class="section-desc">Official assessment deliverables ready for review, export, and verification.</p>
+          </div>
+        </div>
+
+        <div class="grid-2col">
+          <div class="card deliverable-card">
+            <div class="deliverable-badge">Primary Deliverable</div>
+            <div class="deliverable-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="12" y1="18" x2="12" y2="12"/>
+                <line x1="9" y1="15" x2="15" y2="15"/>
+              </svg>
+            </div>
+            <h3 class="card-title">QA_Assessment_Report.xlsx</h3>
+            <p class="text-muted">Standardized multi-sheet Excel spreadsheet containing complete product-level assessment findings and mapped E2E automated test catalog with professional corporate styling.</p>
+            <div class="deliverable-actions">
+              <a href="/api/download-excel" class="btn btn-primary">Download Excel (.xlsx)</a>
+              <button class="btn btn-outline" id="btnRebuildExcel">Rebuild Sheet</button>
+            </div>
+          </div>
+
+          <div class="card deliverable-card">
+            <div class="deliverable-badge">Documentation</div>
+            <div class="deliverable-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+              </svg>
+            </div>
+            <h3 class="card-title">QA_EXECUTION_REPORT.md</h3>
+            <p class="text-muted">Complete Senior QA Engineering assessment report detailing scope, risk analysis, OrangeHRM exploratory matrix, SauceDemo E2E test architecture, and reproduction steps.</p>
+            <div class="deliverable-actions">
+              <a href="https://github.com/Basanagouda7/QA-Assignment/blob/main/QA_EXECUTION_REPORT.md" target="_blank" class="btn btn-secondary">View Markdown on GitHub ↗</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal Lightbox for Image Zoom -->
+  <div class="modal" id="imageModal">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modalTitle">Evidence Screenshot</h4>
+      </div>
+      <div class="modal-body">
+        <img src="" alt="Evidence Full" id="modalImage" class="modal-img">
+      </div>
+      <div class="modal-footer" id="modalFooter">
+        <span class="modal-caption" id="modalCaption">Evidence detail</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
